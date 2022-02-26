@@ -1,13 +1,30 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { css } from "@emotion/react";
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
 
-const titleStyle = css({
-  background: 'pink'
+const mainContainer = css({
+  display: "flex",
+  background: "pink",
+  height: "100vh"
+});
+
+const navbar = css({
+  display: "flex",
+  flexDirection: "column",
+  background: "green",
 })
+
+const contentContainer = css({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  flex: "1 0 auto"
+})
+
 
 
 const Home: NextPage = () => {
@@ -19,48 +36,65 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 css={titleStyle}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p css={css`background-color: pink`}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+      <div css={mainContainer}>
+        {/* Left navigation bar */}
+        <nav css={navbar}>
+          {/* Main logo and link to home page */}
+          <a href="/">Defi Llama</a>
+          {/* Switch from DeFi to NFTs */}
+          <div>
+            <button>DeFi</button>
+            <button>NFTs</button>
+          </div>
+          {/* Navigation */}
+          <div>
+            <div>Overview</div>
+            <div>Chains</div>
+            <div>Favourites</div>
+            <div>About</div>
+            <div>Overview</div>
+          </div>
+        </nav>
+        {/* Main content, chart etc. */}
+        <div css={contentContainer}>
+          {/* Search bar */}
+          <form>
+            <input placeholder="Search..." />
+          </form>
+          {/* Container for info about TVL, change etc. */}
+          <div>
+            {/* TVL */}
+            <div>
+              <p>Total Value Locked (USD)</p>
+              <p>50m</p>
+            </div>
+            {/* Change */}
+            <div>
+              <p>Change 24h</p>
+              <p>50%</p>
+            </div>
+          </div>
+          {/* Historical analysis chart */}
+          <div>Total TVL</div>
+          {/* Table */}
+          <div>
+            <p>TVL Rankings</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Chains</th>
+                  <th>1d Change</th>
+                  <th>7d Change</th>
+                  <th>1m Change</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
