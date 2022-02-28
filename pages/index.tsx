@@ -4,18 +4,13 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import {Navbar} from "../components/Navbar";
 
 const mainContainer = css({
   display: "flex",
   background: "pink",
   height: "100vh"
 });
-
-const navbar = css({
-  display: "flex",
-  flexDirection: "column",
-  background: "green",
-})
 
 const contentContainer = css({
   display: "flex",
@@ -25,7 +20,9 @@ const contentContainer = css({
   flex: "1 0 auto"
 })
 
-
+const navbarWrapper = css({
+  background: "linear-gradient(168deg, rgb(52, 65, 121) 3.98%, rgb(68, 94, 208) 100%)"
+})
 
 const Home: NextPage = () => {
   return (
@@ -37,24 +34,9 @@ const Home: NextPage = () => {
       </Head>
 
       <div css={mainContainer}>
-        {/* Left navigation bar */}
-        <nav css={navbar}>
-          {/* Main logo and link to home page */}
-          <a href="/">Defi Llama</a>
-          {/* Switch from DeFi to NFTs */}
-          <div>
-            <button>DeFi</button>
-            <button>NFTs</button>
-          </div>
-          {/* Navigation */}
-          <div>
-            <div>Overview</div>
-            <div>Chains</div>
-            <div>Favourites</div>
-            <div>About</div>
-            <div>Overview</div>
-          </div>
-        </nav>
+        <div css={navbarWrapper}>
+          <Navbar />
+        </div>
         {/* Main content, chart etc. */}
         <div css={contentContainer}>
           {/* Search bar */}
