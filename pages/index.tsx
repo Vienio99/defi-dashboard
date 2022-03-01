@@ -4,12 +4,13 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import {Navbar} from "../components/Navbar";
+import { Navbar } from "../components/Navbar";
+import { Table } from "../components/Table";
 
 const mainContainer = css({
   display: "flex",
   background: "pink",
-  height: "100vh"
+  height: "100vh",
 });
 
 const contentContainer = css({
@@ -17,12 +18,13 @@ const contentContainer = css({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  flex: "1 0 auto"
-})
+  flex: "1 0 auto",
+});
 
 const navbarWrapper = css({
-  background: "linear-gradient(168deg, rgb(52, 65, 121) 3.98%, rgb(68, 94, 208) 100%)"
-})
+  background:
+    "linear-gradient(168deg, rgb(52, 65, 121) 3.98%, rgb(68, 94, 208) 100%)",
+});
 
 const Home: NextPage = () => {
   return (
@@ -39,40 +41,8 @@ const Home: NextPage = () => {
         </div>
         {/* Main content, chart etc. */}
         <div css={contentContainer}>
-          {/* Search bar */}
-          <form>
-            <input placeholder="Search..." />
-          </form>
-          {/* Container for info about TVL, change etc. */}
-          <div>
-            {/* TVL */}
-            <div>
-              <p>Total Value Locked (USD)</p>
-              <p>50m</p>
-            </div>
-            {/* Change */}
-            <div>
-              <p>Change 24h</p>
-              <p>50%</p>
-            </div>
-          </div>
-          {/* Historical analysis chart */}
-          <div>Total TVL</div>
           {/* Table */}
-          <div>
-            <p>TVL Rankings</p>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Chains</th>
-                  <th>1d Change</th>
-                  <th>7d Change</th>
-                  <th>1m Change</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
+          <Table />
         </div>
       </div>
     </div>
@@ -80,3 +50,23 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+// {/* Search bar */}
+// <form>
+//   <input placeholder="Search..." />
+// </form>
+// {/* Container for info about TVL, change etc. */}
+// <div>
+//   {/* TVL */}
+//   <div>
+//     <p>Total Value Locked (USD)</p>
+//     <p>50m</p>
+//   </div>
+//   {/* Change */}
+//   <div>
+//     <p>Change 24h</p>
+//     <p>50%</p>
+//   </div>
+// </div>
+// {/* Historical analysis chart */}
+// <div>Total TVL</div>
