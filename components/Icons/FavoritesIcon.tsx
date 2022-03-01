@@ -1,6 +1,6 @@
 import React from "react";
 
-export const OverviewIcon = () => (
+export const FavoritesIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="20"
@@ -12,7 +12,6 @@ export const OverviewIcon = () => (
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-    <polyline points="17 6 23 6 23 12"></polyline>
+    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
   </svg>
 );
