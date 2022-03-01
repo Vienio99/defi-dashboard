@@ -3,16 +3,19 @@ import { css } from "@emotion/react";
 import { FC } from "react";
 import { FavoritesIcon } from "../Icons/FavoritesIcon";
 
-// TO-DO: props interface
+interface TableItemProps {
+  name: string;
+  tvl: number;
+  tokenSymbol: string | null;
+}
 
-export const TableItem: FC = () => {
+export const TableItem: FC<TableItemProps> = (chainData) => {
+  console.log(chainData.name);
   return (
     <tr>
-      <td>Curve</td>
-      <td>Ethereum</td>
-      <td>12%</td>
-      <td>13%</td>
-      <td>5%</td>
+      <td>{chainData.name}</td>
+      <td>{chainData.tvl}</td>
+      <td>{chainData.tokenSymbol ? chainData.tokenSymbol : "-"}</td>
     </tr>
   );
 };
