@@ -7,15 +7,13 @@ import { FavoritesIcon } from "../Icons/FavoritesIcon";
 import { OverviewIcon } from "../Icons/OverviewIcon";
 import * as styles from "./styles";
 
-
-
 export const Navbar: FC = () => {
   return (
     // {/* Left navigation bar */}
     <nav css={styles.navbarContainer}>
       {/* Main logo and link to home page */}
       <a href="/" css={styles.title}>
-        Defi Llama
+        🌕 Defi Luna
       </a>
       {/* Switch from DeFi to NFTs */}
       <div css={styles.navSwitch}>

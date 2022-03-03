@@ -9,7 +9,7 @@ import { Table } from "../components/Table";
 
 const mainContainer = css({
   display: "flex",
-  background: "pink",
+  background: "#ededf2",
   height: "100vh",
 });
 
@@ -23,7 +23,7 @@ const contentContainer = css({
 
 const navbarWrapper = css({
   background:
-    "linear-gradient(168deg, rgb(52, 65, 121) 3.98%, rgb(68, 94, 208) 100%)",
+    "linear-gradient(0deg, rgba(75,105,172,1) 0%, rgba(14,60,165,1) 73%)",
 });
 
 const Home: NextPage = () => {

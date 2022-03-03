@@ -6,7 +6,7 @@ export const navbarContainer = css({
   flexDirection: "column",
   marginTop: "1rem",
   color: "white",
-  padding: "2rem",
+  padding: "2.8rem",
   gap: "1rem"
 });
 
@@ -44,5 +44,6 @@ export const navSwitchBtn = css({
   height: "1.8rem",
   borderRadius: "10px",
   color: "white",
-  fontSize: "14px"
+  fontSize: "14px",
+  fontWeight: "bold"
 })
