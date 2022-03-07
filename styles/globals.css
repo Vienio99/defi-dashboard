@@ -14,3 +14,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
+/* tr, th {
+  border-bottom: 1px solid black;
+} */

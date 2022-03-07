@@ -7,25 +7,30 @@ import { TableItem } from "../TableItem";
 
 const tableWrapper = css({
   height: "100%",
-  width: "50%",
+  width: "64rem",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
 });
 
 const tableContainer = css({
-  display: "flex",
-  flexDirection: "column",
-  border: "3px solid white",
+  border: "3px solid black",
+  width: "100%",
+  borderCollapse: "collapse",
+
 });
 
-const tableList = css({
-  display: "flex",
-  flexDirection: "column",
+const tableHeader = css({
+  borderBottom: "2px solid black",
+});
+
+const tableRow = css({
+  // border: "2px solid black"
 });
 
 export const Table: FC = () => {
   const [protocols, setProtocols] = useState<any[]>([]);
+
   useEffect(() => {
     async function fetchProtocols() {
       const url = "https://api.llama.fi/protocols";
@@ -41,7 +46,7 @@ export const Table: FC = () => {
     <div css={tableWrapper}>
       <h1>Total Value Locked Ranking</h1>
       <table css={tableContainer}>
-        <thead>
+        <thead css={tableHeader}>
           <tr>
             <th>Name</th>
             <th>TVL</th>
@@ -55,6 +60,7 @@ export const Table: FC = () => {
           </tr>
         </thead>
         <tbody>
+          {/* TO-DO: make it render every protocol before displaying because now it's a bit clunky */}
           {protocols.map((protocolData) => {
             console.log(protocolData.chains.includes("Terra") && protocolData);
             return (
@@ -67,6 +73,7 @@ export const Table: FC = () => {
                   symbol={protocolData.symbol}
                   chains={protocolData.chains}
                   category={protocolData.category}
+                  tableRow={tableRow}
                 />
               )
             );
