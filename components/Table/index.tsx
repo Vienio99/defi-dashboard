@@ -17,7 +17,6 @@ const tableContainer = css({
   border: "3px solid black",
   width: "100%",
   borderCollapse: "collapse",
-
 });
 
 const tableHeader = css({
@@ -25,7 +24,11 @@ const tableHeader = css({
 });
 
 const tableRow = css({
-  // border: "2px solid black"
+  paddingBottom: "5px",
+});
+
+const headerRow = css({
+  textAlign: "left",
 });
 
 export const Table: FC = () => {
@@ -36,8 +39,12 @@ export const Table: FC = () => {
       const url = "https://api.llama.fi/protocols";
       const res = await fetch(url);
       const data = await res.json();
-      console.log(data);
-      setProtocols(data);
+      const filteredData = data.filter(
+        (protocol: { chains: string | string[] }) =>
+          protocol.chains.includes("Terra")
+      );
+      console.log(filteredData);
+      setProtocols(filteredData);
     }
 
     fetchProtocols();
@@ -47,7 +54,7 @@ export const Table: FC = () => {
       <h1>Total Value Locked Ranking</h1>
       <table css={tableContainer}>
         <thead css={tableHeader}>
-          <tr>
+          <tr css={headerRow}>
             <th>Name</th>
             <th>TVL</th>
             <th>Symbol</th>
@@ -61,21 +68,20 @@ export const Table: FC = () => {
         </thead>
         <tbody>
           {/* TO-DO: make it render every protocol before displaying because now it's a bit clunky */}
-          {protocols.map((protocolData) => {
+          {protocols.map((protocolData, index) => {
             console.log(protocolData.chains.includes("Terra") && protocolData);
             return (
-              protocolData.chains.includes("Terra") && (
-                <TableItem
-                  key={protocolData.id}
-                  logo={protocolData.logo}
-                  name={protocolData.name}
-                  tvl={protocolData.chainTvls.Terra}
-                  symbol={protocolData.symbol}
-                  chains={protocolData.chains}
-                  category={protocolData.category}
-                  tableRow={tableRow}
-                />
-              )
+              <TableItem
+                key={protocolData.id}
+                index={index + 1}
+                logo={protocolData.logo}
+                name={protocolData.name}
+                tvl={protocolData.chainTvls.Terra}
+                symbol={protocolData.symbol}
+                chains={protocolData.chains}
+                category={protocolData.category}
+                tableRow={tableRow}
+              />
             );
           })}
         </tbody>
