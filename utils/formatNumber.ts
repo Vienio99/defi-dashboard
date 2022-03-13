@@ -1,4 +1,4 @@
-// Turn high numbers into more readable format f. e. 1.32b, 1.28m, 1.84k
+// Turn high numbers into more readable format f. e. 1.32b, 1.28m, 1.84k (useful for TVLs)
 const formatNumber = (num: number): string => {
   if (num / 1.0e9 >= 1) {
     const formattedNumber = (num / 1.0e9).toFixed(2).toString();

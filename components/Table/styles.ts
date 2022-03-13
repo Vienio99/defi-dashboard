@@ -10,13 +10,12 @@ export const tableWrapper = css({
 });
 
 export const tableContainer = css({
-  border: "3px solid black",
-  width: "100%",
   borderCollapse: "collapse",
+  width: "100%",
 });
 
 export const tableHeader = css({
-  borderBottom: "2px solid black",
+  borderBottom: "1px solid grey",
 });
 
 export const tableRow = css({
