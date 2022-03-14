@@ -31,7 +31,13 @@ interface ProtocolData {
   logo: string;
   symbol: string;
   category: string;
-  currentChainTvls: { Terra: number };
+  chainTvls: {
+    Terra: {
+      tvl:
+        | Array<{ date: number; totalLiquidityUSD: number | undefined }>
+        | undefined;
+    };
+  };
 }
 
 export const TableItem: FC<TableItemProps> = (data) => {
@@ -52,28 +58,41 @@ export const TableItem: FC<TableItemProps> = (data) => {
     async function fetchProtocolData() {
       const url = `https://api.llama.fi/protocol/${protocolName}`;
       const res = await fetch(url);
-      const data = await res.json();
+      const data: ProtocolData = await res.json();
 
       setProtocolData(data);
-      const tvls = data.chainTvls.Terra.tvl;
-      console.log(data);
 
-      const tvlsLength = tvls.length - 1;
+      const tvls = data.chainTvls?.Terra?.tvl;
+      console.log(tvls);
 
-      const currentTVL = tvls[tvlsLength].totalLiquidityUSD;
-      setCurrentTVL(currentTVL);
+      if (tvls !== undefined) {
+        const tvlsLength = tvls.length - 1;
+        const currentTVL = tvls[tvlsLength].totalLiquidityUSD;
+        console.log(currentTVL);
 
+        if (currentTVL !== undefined) {
+          setCurrentTVL(currentTVL);
 
-      const tvlOneDayAgo = tvls[tvlsLength - 1].totalLiquidityUSD;
-      const tvlOneWeekAgo = tvls[tvlsLength - 7].totalLiquidityUSD;
-      const tvlOneMonthAgo = tvls[tvlsLength - 30].totalLiquidityUSD;
+          const tvlOneDayAgo = tvls[tvlsLength - 1]?.totalLiquidityUSD;
 
-      const oneDayTVLchange = (currentTVL / tvlOneDayAgo - 1) * 100;
-      const oneWeekTVLchange = (currentTVL / tvlOneWeekAgo - 1) * 100;
-      const oneMonthTVLchange = (currentTVL / tvlOneMonthAgo - 1) * 100;
-      setOneDayChange(oneDayTVLchange);
-      setOneWeekChange(oneWeekTVLchange);
-      setOneMonthChange(oneMonthTVLchange);
+          if (tvlOneDayAgo !== undefined) {
+            const oneDayTVLchange = (currentTVL / tvlOneDayAgo - 1) * 100;
+            setOneDayChange(oneDayTVLchange);
+          }
+
+          const tvlOneWeekAgo = tvls[tvlsLength - 7]?.totalLiquidityUSD;
+          if (tvlOneWeekAgo !== undefined) {
+            const oneWeekTVLchange = (currentTVL / tvlOneWeekAgo - 1) * 100;
+            setOneWeekChange(oneWeekTVLchange);
+          }
+
+          const tvlOneMonthAgo = tvls[tvlsLength - 30]?.totalLiquidityUSD;
+          if (tvlOneMonthAgo !== undefined) {
+            const oneMonthTVLchange = (currentTVL / tvlOneMonthAgo - 1) * 100;
+            setOneMonthChange(oneMonthTVLchange);
+          }
+        }
+      }
     }
 
     fetchProtocolData();
@@ -99,10 +118,9 @@ export const TableItem: FC<TableItemProps> = (data) => {
           </td>
           <td>{currentTVL && formatNumber(currentTVL)}</td>
           <td>{protocolData.category}</td>
-          {/* TO-DO: move it to external function maybe? */}
-          <td>{oneDayChange && roundNumber(oneDayChange, 2)}%</td>
-          <td>{oneWeekChange && roundNumber(oneWeekChange, 2)}%</td>
-          <td>{oneMonthChange && roundNumber(oneMonthChange, 2)}%</td>
+          <td>{oneDayChange && <>{roundNumber(oneDayChange, 3)}%</>}</td>
+          <td>{oneWeekChange && <>{roundNumber(oneWeekChange, 3)}%</>}</td>
+          <td>{oneMonthChange && <>{roundNumber(oneMonthChange, 3)}%</>}</td>
         </tr>
       )}
     </>
