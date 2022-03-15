@@ -5,52 +5,9 @@ import { fileURLToPath } from "url";
 import { FavoritesIcon } from "../Icons/FavoritesIcon";
 import { TableItem } from "../TableItem";
 import * as styles from "./styles";
-
-const protocols = [
-  "lido",
-  "anchor",
-  "astroport",
-  "wormhole",
-  "stader",
-  "terraswap",
-  "mirror",
-  "prism-protocol",
-  "allbridge",
-  "mars-protocol",
-  "pylon-protocol",
-  "spectrum-protocol",
-  "loop-finance",
-  "nexus-protocol",
-  "white-whale",
-  "edge-protocol",
-  "apollodao",
-  "starterra",
-  "soluna",
-  "risk-harbor",
-  "ink-protocol",
-  "loterra",
-  "terrafloki",
-  "valkyrie",
-];
+import { protocols } from "../../constants";
 
 export const Table: FC = () => {
-  // const [protocols, setProtocols] = useState<any[]>([]);
-
-  // useEffect(() => {
-  //   async function fetchProtocols() {
-  //     const url = "https://api.llama.fi/protocols";
-  //     const res = await fetch(url);
-  //     const data = await res.json();
-  //     const filteredData = data.filter(
-  //       (protocol: { chains: string | string[] }) =>
-  //         protocol.chains.includes("Terra")
-  //     );
-
-  //     setProtocols(filteredData);
-  //   }
-
-  //   fetchProtocols();
-  // }, []);
   return (
     <div css={styles.tableWrapper}>
       <h1>TVL Ranking</h1>
@@ -72,18 +29,10 @@ export const Table: FC = () => {
           {protocols.map((protocol, index) => {
             // console.log(protocolData.chains.includes("Terra") && protocolData);
             return (
-              // TO-DO: change one props only instead of 10 like below
               <TableItem
-                protocolName={protocol}
+                protocolName={protocol.name}
                 index={index + 1}
-                // key={protocolData.id}
-                // logo={protocolData.logo}
-                // name={protocolData.name}
-                // tvl={protocolData.chainTvls.Terra}
-                // symbol={protocolData.symbol}
-                // chains={protocolData.chains}
-                // category={protocolData.category}
-                // tableRow={styles.tableRow}
+                key={protocol.id}
               />
             );
           })}
@@ -92,3 +41,21 @@ export const Table: FC = () => {
     </div>
   );
 };
+
+// const [protocols, setProtocols] = useState<any[]>([]);
+
+// useEffect(() => {
+//   async function fetchProtocols() {
+//     const url = "https://api.llama.fi/protocols";
+//     const res = await fetch(url);
+//     const data = await res.json();
+//     const filteredData = data.filter(
+//       (protocol: { chains: string | string[] }) =>
+//         protocol.chains.includes("Terra")
+//     );
+
+//     setProtocols(filteredData);
+//   }
+
+//   fetchProtocols();
+// }, []);

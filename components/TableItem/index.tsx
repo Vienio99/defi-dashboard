@@ -33,9 +33,7 @@ interface ProtocolData {
   category: string;
   chainTvls: {
     Terra: {
-      tvl:
-        | Array<{ date: number; totalLiquidityUSD: number | undefined }>
-        | undefined;
+      tvl: Array<{ date: number; totalLiquidityUSD: number }>;
     };
   };
 }
@@ -99,7 +97,6 @@ export const TableItem: FC<TableItemProps> = (data) => {
   }, []);
 
   return (
-    // <tr css={tableRow}>
     <>
       {protocolData && (
         <tr>
@@ -118,28 +115,21 @@ export const TableItem: FC<TableItemProps> = (data) => {
           </td>
           <td>{currentTVL && formatTvl(currentTVL)}</td>
           <td>{protocolData.category}</td>
-          <td>{oneDayChange && <>{roundTvlChangePercentage(oneDayChange, 3)}%</>}</td>
-          <td>{oneWeekChange && <>{roundTvlChangePercentage(oneWeekChange, 3)}%</>}</td>
-          <td>{oneMonthChange && <>{roundTvlChangePercentage(oneMonthChange, 3)}%</>}</td>
+          <td>
+            {oneDayChange && <>{roundTvlChangePercentage(oneDayChange, 3)}%</>}
+          </td>
+          <td>
+            {oneWeekChange && (
+              <>{roundTvlChangePercentage(oneWeekChange, 3)}%</>
+            )}
+          </td>
+          <td>
+            {oneMonthChange && (
+              <>{roundTvlChangePercentage(oneMonthChange, 3)}%</>
+            )}
+          </td>
         </tr>
       )}
     </>
   );
 };
-
-// console.log(
-//   "TVL: " + tvls[tvlsLength].totalLiquidityUSD,
-//   "For day: " + tvls[tvlsLength].date
-// );
-// console.log(
-//   "TVL: " + tvls[tvlsLength - 1].totalLiquidityUSD,
-//   "For day: " + tvls[tvlsLength - 1].date
-// );
-// console.log(
-//   "TVL: " + tvls[tvlsLength - 7].totalLiquidityUSD,
-//   "For day: " + tvls[tvlsLength - 7].date
-// );
-// console.log(
-//   "TVL: " + tvls[tvlsLength - 30].totalLiquidityUSD,
-//   "For day: " + tvls[tvlsLength - 30].date
-// );
