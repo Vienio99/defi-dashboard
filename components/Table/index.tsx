@@ -17,22 +17,19 @@ export const Table: FC = () => {
             <th>Name</th>
             <th>TVL</th>
             <th>Category</th>
-            {/* TO-DO: some protocols are multi-chain and tvl parsed is for all chains so it needs to be terra specific */}
             <th>1d change</th>
             <th>7d change</th>
             <th>1m change</th>
-            {/* <th>Terra only</th> */}
           </tr>
         </thead>
         <tbody>
           {/* TO-DO: make it render every protocol >>before<< displaying because now it's a bit clunky */}
           {protocols.map((protocol, index) => {
-            // console.log(protocolData.chains.includes("Terra") && protocolData);
             return (
               <TableItem
+                key={protocol.id}
                 protocolName={protocol.name}
                 index={index + 1}
-                key={protocol.id}
               />
             );
           })}

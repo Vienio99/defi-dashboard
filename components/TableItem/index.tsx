@@ -53,6 +53,8 @@ export const TableItem: FC<TableItemProps> = (data) => {
   const [oneMonthChange, setOneMonthChange] = useState<number>();
 
   useEffect(() => {
+    // TO-DO: move this function to getStaticProps
+    // TO-DO: provide filtering
     async function fetchProtocolData() {
       const url = `https://api.llama.fi/protocol/${protocolName}`;
       const res = await fetch(url);
@@ -115,19 +117,24 @@ export const TableItem: FC<TableItemProps> = (data) => {
           </td>
           <td>{currentTVL && formatTvl(currentTVL)}</td>
           <td>{protocolData.category}</td>
-          <td>
-            {oneDayChange && <>{roundTvlChangePercentage(oneDayChange, 3)}%</>}
-          </td>
-          <td>
-            {oneWeekChange && (
-              <>{roundTvlChangePercentage(oneWeekChange, 3)}%</>
-            )}
-          </td>
-          <td>
-            {oneMonthChange && (
-              <>{roundTvlChangePercentage(oneMonthChange, 3)}%</>
-            )}
-          </td>
+
+          {oneDayChange && (
+            <td css={{ color: oneDayChange >= 0 ? "green" : "red" }}>
+              {roundTvlChangePercentage(oneDayChange, 3)}%
+            </td>
+          )}
+
+          {oneWeekChange && (
+            <td css={{ color: oneWeekChange >= 0 ? "green" : "red" }}>
+              {roundTvlChangePercentage(oneWeekChange, 3)}%
+            </td>
+          )}
+
+          {oneMonthChange && (
+            <td css={{ color: oneMonthChange >= 0 ? "green" : "red" }}>
+              {roundTvlChangePercentage(oneMonthChange, 3)}%
+            </td>
+          )}
         </tr>
       )}
     </>
