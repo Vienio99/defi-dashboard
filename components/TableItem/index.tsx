@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css, SerializedStyles } from "@emotion/react";
 import { FC, useEffect, useState } from "react";
-import formatNumber from "../../utils/formatNumber";
-import roundNumber from "../../utils/roundNumber";
+import formatTvl from "../../utils/formatTvl";
+import roundTvlChangePercentage from "../../utils/roundTvlChangePercentage";
 import { FavoritesIcon } from "../Icons/FavoritesIcon";
 import * as styles from "./styles";
 
@@ -116,11 +116,11 @@ export const TableItem: FC<TableItemProps> = (data) => {
             {protocolData.name}
             {protocolData.symbol != "-" && ` (${protocolData.symbol})`}
           </td>
-          <td>{currentTVL && formatNumber(currentTVL)}</td>
+          <td>{currentTVL && formatTvl(currentTVL)}</td>
           <td>{protocolData.category}</td>
-          <td>{oneDayChange && <>{roundNumber(oneDayChange, 3)}%</>}</td>
-          <td>{oneWeekChange && <>{roundNumber(oneWeekChange, 3)}%</>}</td>
-          <td>{oneMonthChange && <>{roundNumber(oneMonthChange, 3)}%</>}</td>
+          <td>{oneDayChange && <>{roundTvlChangePercentage(oneDayChange, 3)}%</>}</td>
+          <td>{oneWeekChange && <>{roundTvlChangePercentage(oneWeekChange, 3)}%</>}</td>
+          <td>{oneMonthChange && <>{roundTvlChangePercentage(oneMonthChange, 3)}%</>}</td>
         </tr>
       )}
     </>
