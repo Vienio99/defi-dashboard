@@ -16,7 +16,8 @@ export const contentContainer = css({
 });
 
 export const navbarWrapper = css({
-  background: "rgb(27, 30, 49)",
+  backgroundColor: "rgb(31, 34, 55)",
+  boxShadow: "rgb(17 19 30) 1px 1px 2px, rgb(53 57 84) -1px -1px 2px",
 });
 
 export const container = css({

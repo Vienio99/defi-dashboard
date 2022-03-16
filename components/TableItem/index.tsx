@@ -38,6 +38,7 @@ interface ProtocolData {
   };
 }
 
+// TO-DO: take into consideration what happens with the page if list passes 100vh
 export const TableItem: FC<TableItemProps> = (data) => {
   // const { index, name, logo, tvl, symbol, category, tableRow } = protocolData;
   const { index, protocolName } = data;

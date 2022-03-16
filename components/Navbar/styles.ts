@@ -7,13 +7,13 @@ export const navbarContainer = css({
   marginTop: "1rem",
   color: "white",
   padding: "2.8rem",
-  gap: "1rem"
+  gap: "1rem",
 });
 
 export const title = css({
   fontWeight: "bold",
-  fontSize: "1.8rem"
-})
+  fontSize: "1.8rem",
+});
 
 export const navItems = css({
   display: "flex",
@@ -26,16 +26,16 @@ export const navItem = css({
   alignItems: "center",
   gap: "0.8rem",
   color: "#D3D3D3",
-  '&:hover': {
-    color: 'white'
-  }
+  "&:hover": {
+    color: "white",
+  },
 });
 
 export const navSwitch = css({
   display: "flex",
   gap: "0.4rem",
-  margin: "12px 0 12px 0"
-})
+  margin: "12px 0 12px 0",
+});
 
 export const navSwitchBtn = css({
   border: "none",
@@ -45,5 +45,5 @@ export const navSwitchBtn = css({
   borderRadius: "10px",
   color: "white",
   fontSize: "14px",
-  fontWeight: "bold"
-})
+  fontWeight: "bold",
+});

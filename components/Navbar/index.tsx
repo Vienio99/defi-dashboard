@@ -4,6 +4,7 @@ import { FC } from "react";
 import { AboutIcon } from "../Icons/AboutIcon";
 import { ChainsIcon } from "../Icons/ChainsIcon";
 import { FavoritesIcon } from "../Icons/FavoritesIcon";
+import { NftIcon } from "../Icons/NftIcon";
 import { OverviewIcon } from "../Icons/OverviewIcon";
 import * as styles from "./styles";
 
@@ -28,7 +29,11 @@ export const Navbar: FC = () => {
         </div>
         <div css={styles.navItem}>
           <ChainsIcon />
-          Chains
+          Protocols
+        </div>
+        <div css={styles.navItem}>
+          <NftIcon />
+          NFTs
         </div>
         <div css={styles.navItem}>
           <FavoritesIcon />
