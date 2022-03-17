@@ -23,4 +23,6 @@ export const protocols = [
   { id: 22, name: "stader" },
   { id: 23, name: "mirror" },
   { id: 24, name: "soluna" },
+  { id: 25, name: "kuijra" },
+  { id: 26, name: "angel-protocol" },
 ];
