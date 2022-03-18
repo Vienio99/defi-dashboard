@@ -1,3 +1,5 @@
+// TO-DO: not sure if this id is necessary after all?
+
 export const protocols = [
   { id: 1, name: "lido" },
   { id: 2, name: "anchor" },

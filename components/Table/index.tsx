@@ -1,15 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import {
-  Dispatch,
-  FC,
-  ProviderExoticComponent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import { fileURLToPath } from "url";
-import { FavoritesIcon } from "../Icons/FavoritesIcon";
+import { FC, useEffect, useState } from "react";
 import { TableItem } from "../TableItem";
 import * as styles from "./styles";
 import { protocols } from "../../constants";
@@ -32,11 +23,11 @@ export const Table: FC = () => {
   const [protocolsData, setProtocolsData] = useState<Array<ProtocolData>>([]);
 
   useEffect(() => {
-    async function fetchProtocolData() {
+    async function fetchProtocolsData() {
       await Promise.all(
-        protocols.map(protocol => fetchProtocol(protocol.name))
+        protocols.map((protocol) => fetchProtocol(protocol.name))
       ).then((protocols) => {
-        // filter out any undefined protocols so the type is Array<ProtocolData>
+        // filter out any undefined protocols so the type is Array<ProtocolData> instead of Array<ProtocolData | undefined>
         const filteredProtocols = [...protocols].filter(
           (protocol): protocol is ProtocolData => !!protocol
         );
@@ -46,7 +37,7 @@ export const Table: FC = () => {
       });
     }
 
-    fetchProtocolData();
+    fetchProtocolsData();
   }, []);
 
   return (
@@ -81,21 +72,3 @@ export const Table: FC = () => {
     </div>
   );
 };
-
-// const [protocols, setProtocols] = useState<any[]>([]);
-
-// useEffect(() => {
-//   async function fetchProtocols() {
-//     const url = "https://api.llama.fi/protocols";
-//     const res = await fetch(url);
-//     const data = await res.json();
-//     const filteredData = data.filter(
-//       (protocol: { chains: string | string[] }) =>
-//         protocol.chains.includes("Terra")
-//     );
-
-//     setProtocols(filteredData);
-//   }
-
-//   fetchProtocols();
-// }, []);
