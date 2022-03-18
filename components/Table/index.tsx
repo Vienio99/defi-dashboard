@@ -1,13 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { FC, useEffect, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  ProviderExoticComponent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { fileURLToPath } from "url";
 import { FavoritesIcon } from "../Icons/FavoritesIcon";
 import { TableItem } from "../TableItem";
 import * as styles from "./styles";
 import { protocols } from "../../constants";
+import sortProtocols from "../../utils/sortProtocols";
+import { fetchProtocol } from "../../utils/fetchProtocol";
 
-interface ProtocolData {
+export interface ProtocolData {
   id: number;
   name: string;
   symbol: string;
@@ -22,97 +31,17 @@ interface ProtocolData {
 export const Table: FC = () => {
   const [protocolsData, setProtocolsData] = useState<Array<ProtocolData>>([]);
 
-  const sortProtocolsData = (
-    data: Array<ProtocolData>,
-    field: keyof ProtocolData,
-    reverse?: boolean
-  ): Array<ProtocolData> => {
-    const sortedData = data.sort((a, b) => {
-      if (a[field] === undefined) {
-        return 1;
-      } else if (b[field] === undefined) {
-        return -1;
-      }
-      if (reverse) {
-        return (a[field] as number) - (b[field] as number);
-      }
-      return (b[field] as number) - (a[field] as number);
-    });
-
-    return sortedData;
-  };
-
   useEffect(() => {
     async function fetchProtocolData() {
       await Promise.all(
-        protocols.map(async (protocol) => {
-          try {
-            const url = `https://api.llama.fi/protocol/${protocol.name}`;
-            const response = await fetch(url);
-            const data = await response.json();
-
-            const tvls = data.chainTvls?.Terra?.tvl;
-
-            const protocolData: ProtocolData = {
-              id: data.id,
-              name: data.name,
-              symbol: data.symbol,
-              category: data.category,
-              logo: data.logo,
-              currentTvl: undefined,
-              oneDayChange: undefined,
-              oneWeekChange: undefined,
-              oneMonthChange: undefined,
-            };
-
-            if (tvls !== undefined) {
-              const tvlsLength = tvls.length - 1;
-              const currentTVL = tvls[tvlsLength].totalLiquidityUSD;
-              console.log(currentTVL);
-
-              if (currentTVL !== undefined) {
-                protocolData.currentTvl = currentTVL;
-
-                const tvlOneDayAgo = tvls[tvlsLength - 1]?.totalLiquidityUSD;
-
-                if (tvlOneDayAgo !== undefined) {
-                  const oneDayTVLchange = (currentTVL / tvlOneDayAgo - 1) * 100;
-                  protocolData.oneDayChange = oneDayTVLchange;
-                }
-
-                const tvlOneWeekAgo = tvls[tvlsLength - 7]?.totalLiquidityUSD;
-                if (tvlOneWeekAgo !== undefined) {
-                  const oneWeekTVLchange =
-                    (currentTVL / tvlOneWeekAgo - 1) * 100;
-                  protocolData.oneWeekChange = oneWeekTVLchange;
-                }
-
-                const tvlOneMonthAgo = tvls[tvlsLength - 30]?.totalLiquidityUSD;
-                if (tvlOneMonthAgo !== undefined) {
-                  const oneMonthTVLchange =
-                    (currentTVL / tvlOneMonthAgo - 1) * 100;
-                  protocolData.oneMonthChange = oneMonthTVLchange;
-                }
-              }
-              return protocolData;
-            }
-          } catch (error) {
-            console.log(error);
-          }
-        })
+        protocols.map(protocol => fetchProtocol(protocol.name))
       ).then((protocols) => {
+        // filter out any undefined protocols so the type is Array<ProtocolData>
         const filteredProtocols = [...protocols].filter(
           (protocol): protocol is ProtocolData => !!protocol
         );
-        // const sortedProtocols = filteredProtocols.sort(function (a, b) {
-        //   if (a.oneMonthChange === undefined) {
-        //     return 1;
-        //   } else if (b.oneMonthChange === undefined) {
-        //     return -1;
-        //   }
-        //   return b.oneMonthChange - a.oneMonthChange;
-        // });
-        const sortedProtocols = sortProtocolsData(filteredProtocols, "oneMonthChange");
+        const sortedProtocols = sortProtocols(filteredProtocols, "currentTvl");
+
         setProtocolsData(sortedProtocols);
       });
     }
