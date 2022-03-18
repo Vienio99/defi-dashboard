@@ -22,7 +22,7 @@ interface ProtocolData {
 export const Table: FC = () => {
   const [protocolsData, setProtocolsData] = useState<Array<ProtocolData>>([]);
 
-  const sortData = (
+  const sortProtocolsData = (
     data: Array<ProtocolData>,
     field: keyof ProtocolData,
     reverse?: boolean
@@ -32,6 +32,9 @@ export const Table: FC = () => {
         return 1;
       } else if (b[field] === undefined) {
         return -1;
+      }
+      if (reverse) {
+        return (a[field] as number) - (b[field] as number);
       }
       return (b[field] as number) - (a[field] as number);
     });
@@ -109,7 +112,7 @@ export const Table: FC = () => {
         //   }
         //   return b.oneMonthChange - a.oneMonthChange;
         // });
-        const sortedProtocols = sortData(filteredProtocols, "currentTvl");
+        const sortedProtocols = sortProtocolsData(filteredProtocols, "oneMonthChange");
         setProtocolsData(sortedProtocols);
       });
     }
