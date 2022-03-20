@@ -23,6 +23,7 @@ export interface ProtocolData {
 export const Table: FC = () => {
   const [protocolsData, setProtocolsData] = useState<Array<ProtocolData>>([]);
   const [reverseSorting, setReverseSorting] = useState<boolean>(false);
+  const [sortedBy, setSortedBy] = useState<keyof ProtocolData>("currentTvl");
 
   const handleSort = (field: keyof ProtocolData) => {
     const sortedProtocols = sortProtocols(
@@ -31,6 +32,10 @@ export const Table: FC = () => {
       reverseSorting
     );
 
+    if (sortedBy === field) {
+      setReverseSorting(!reverseSorting);
+    }
+    setSortedBy(field);
     setProtocolsData(sortedProtocols);
   };
 
@@ -43,11 +48,11 @@ export const Table: FC = () => {
         const filteredProtocols = [...protocols].filter(
           (protocol): protocol is ProtocolData => !!protocol
         );
-        // sort by current tvl initially
+        // sort by current tvl initially, descending order
         const sortedProtocols = sortProtocols(
           filteredProtocols,
-          "currentTvl",
-          reverseSorting
+          sortedBy,
+          false
         );
 
         setProtocolsData(sortedProtocols);
