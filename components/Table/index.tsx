@@ -6,6 +6,7 @@ import * as styles from "./styles";
 import { protocols } from "../../constants";
 import sortProtocols from "../../utils/sortProtocols";
 import { fetchProtocol } from "../../utils/fetchProtocol";
+import { reverse } from "dns";
 
 export interface ProtocolData {
   id: number;
@@ -21,6 +22,17 @@ export interface ProtocolData {
 
 export const Table: FC = () => {
   const [protocolsData, setProtocolsData] = useState<Array<ProtocolData>>([]);
+  const [reverseSorting, setReverseSorting] = useState<boolean>(false);
+
+  const handleSort = (field: keyof ProtocolData) => {
+    const sortedProtocols = sortProtocols(
+      [...protocolsData],
+      field,
+      reverseSorting
+    );
+
+    setProtocolsData(sortedProtocols);
+  };
 
   useEffect(() => {
     async function fetchProtocolsData() {
@@ -31,14 +43,20 @@ export const Table: FC = () => {
         const filteredProtocols = [...protocols].filter(
           (protocol): protocol is ProtocolData => !!protocol
         );
-        const sortedProtocols = sortProtocols(filteredProtocols, "currentTvl");
+        // sort by current tvl initially
+        const sortedProtocols = sortProtocols(
+          filteredProtocols,
+          "currentTvl",
+          reverseSorting
+        );
 
         setProtocolsData(sortedProtocols);
       });
     }
-
-    fetchProtocolsData();
-  }, []);
+    if (protocolsData.length === 0) {
+      fetchProtocolsData();
+    }
+  }, [protocolsData]);
 
   return (
     <div css={styles.tableWrapper}>
@@ -47,11 +65,11 @@ export const Table: FC = () => {
         <thead css={styles.tableHeader}>
           <tr css={styles.headerRow}>
             <th>Name</th>
-            <th>TVL</th>
-            <th>Category</th>
-            <th>1d change</th>
-            <th>7d change</th>
-            <th>1m change</th>
+            <th onClick={() => handleSort("currentTvl")}>TVL</th>
+            <th onClick={() => handleSort("category")}>Category</th>
+            <th onClick={() => handleSort("oneDayChange")}>1d change</th>
+            <th onClick={() => handleSort("oneWeekChange")}>7d change</th>
+            <th onClick={() => handleSort("oneMonthChange")}>1m change</th>
           </tr>
         </thead>
         <tbody>

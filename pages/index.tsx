@@ -7,8 +7,6 @@ import * as styles from "./styles/Home";
 import { Navbar } from "../components/Navbar";
 import { Table } from "../components/Table";
 
-
-
 const Home: NextPage = () => {
   return (
     <div css={styles.container}>
