@@ -1,12 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { TableItem } from "../TableItem";
 import * as styles from "./styles";
 import { protocols } from "../../constants";
 import sortProtocols from "../../utils/sortProtocols";
 import { fetchProtocol } from "../../utils/fetchProtocol";
-import { reverse } from "dns";
 
 export interface ProtocolData {
   id: number;
@@ -22,19 +21,24 @@ export interface ProtocolData {
 
 export const Table: FC = () => {
   const [protocolsData, setProtocolsData] = useState<Array<ProtocolData>>([]);
-  const [reverseSorting, setReverseSorting] = useState<boolean>(false);
   const [sortedBy, setSortedBy] = useState<keyof ProtocolData>("currentTvl");
+  const reverseSortingRef = useRef<boolean>(false);
 
+  // TO-DO: Maybe extract sorting logic to external hook for Nfts etc that will be implemented in the future?
   const handleSort = (field: keyof ProtocolData) => {
+    if (sortedBy === field) {
+      reverseSortingRef.current = !reverseSortingRef.current;
+    } else {
+      reverseSortingRef.current = false;
+    }
+
+    // Create new array with [...protocolsData] to make re-render
     const sortedProtocols = sortProtocols(
       [...protocolsData],
       field,
-      reverseSorting
+      reverseSortingRef.current
     );
 
-    if (sortedBy === field) {
-      setReverseSorting(!reverseSorting);
-    }
     setSortedBy(field);
     setProtocolsData(sortedProtocols);
   };
@@ -61,6 +65,7 @@ export const Table: FC = () => {
     if (protocolsData.length === 0) {
       fetchProtocolsData();
     }
+    console.log("rerender");
   }, [protocolsData]);
 
   return (
