@@ -4,10 +4,12 @@ export const fetchProtocol = async (protocolName: string) => {
   try {
     const url = `https://api.llama.fi/protocol/${protocolName}`;
     const res = await fetch(url);
+    
     if (!res.ok) {
       throw Error("could not fetch the data");
     }
     const data = await res.json();
+    console.log(data);
 
     const tvls = data.chainTvls?.Terra?.tvl;
 
@@ -20,6 +22,7 @@ export const fetchProtocol = async (protocolName: string) => {
     };
 
     if (tvls !== undefined) {
+      protocolData.tvlHistory = tvls;
       const tvlsLength = tvls.length - 1;
       const currentTVL: number = tvls[tvlsLength].totalLiquidityUSD;
       console.log(currentTVL);

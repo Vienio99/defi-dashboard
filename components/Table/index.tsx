@@ -6,6 +6,12 @@ import * as styles from "./styles";
 import { protocols } from "../../constants";
 import sortProtocols from "../../utils/sortProtocols";
 import { fetchProtocol } from "../../utils/fetchProtocol";
+import dynamic from "next/dynamic";
+
+// TO-DO: not sure why it needs to be that way
+const Chart = dynamic(() => import("../../components/Chart"), {
+  ssr: false
+});
 
 export interface ProtocolData {
   id: number;
@@ -17,6 +23,7 @@ export interface ProtocolData {
   oneDayChange?: number;
   oneWeekChange?: number;
   oneMonthChange?: number;
+  tvlHistory?: Array<{ date: number; totalLiquidityUSD: number }>;
 }
 
 export const Table: FC = () => {
@@ -60,6 +67,7 @@ export const Table: FC = () => {
         );
 
         setProtocolsData(sortedProtocols);
+        console.log(sortedProtocols);
       });
     }
     if (protocolsData.length === 0) {
@@ -68,15 +76,18 @@ export const Table: FC = () => {
     console.log("rerender");
   }, [protocolsData]);
 
+
   return (
     <div css={styles.tableWrapper}>
       <h1>TVL Ranking</h1>
+      <Chart/>
       <table css={styles.tableContainer}>
         <thead css={styles.tableHeader}>
           <tr css={styles.headerRow}>
             <th>Name</th>
             <th onClick={() => handleSort("currentTvl")}>TVL</th>
-            <th onClick={() => handleSort("category")}>Category</th>
+            {/* TO-DO: make filtering for category */}
+            <th>Category</th>
             <th onClick={() => handleSort("oneDayChange")}>1d change</th>
             <th onClick={() => handleSort("oneWeekChange")}>7d change</th>
             <th onClick={() => handleSort("oneMonthChange")}>1m change</th>
