@@ -10,7 +10,7 @@ import dynamic from "next/dynamic";
 
 // TO-DO: not sure why it needs to be that way
 const Chart = dynamic(() => import("../../components/Chart"), {
-  ssr: false
+  ssr: false,
 });
 
 export interface ProtocolData {
@@ -29,6 +29,9 @@ export interface ProtocolData {
 export const Table: FC = () => {
   const [protocolsData, setProtocolsData] = useState<Array<ProtocolData>>([]);
   const [sortedBy, setSortedBy] = useState<keyof ProtocolData>("currentTvl");
+  const [terraTvls, setTerraTvls] = useState<
+    Array<{ date: number; totalLiquidityUSD: number }>
+  >([]);
   const reverseSortingRef = useRef<boolean>(false);
 
   // TO-DO: Maybe extract sorting logic to external hook for Nfts etc that will be implemented in the future?
@@ -51,6 +54,18 @@ export const Table: FC = () => {
   };
 
   useEffect(() => {
+    async function fetchTerraTvls() {
+      const url = "https://api.llama.fi/charts/terra";
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        throw Error("could not fetch the data");
+      }
+      const data = await res.json();
+      console.log(data);
+      setTerraTvls(data);
+    }
+
     async function fetchProtocolsData() {
       await Promise.all(
         protocols.map((protocol) => fetchProtocol(protocol.name))
@@ -72,15 +87,15 @@ export const Table: FC = () => {
     }
     if (protocolsData.length === 0) {
       fetchProtocolsData();
+      fetchTerraTvls();
     }
     console.log("rerender");
   }, [protocolsData]);
 
-
   return (
     <div css={styles.tableWrapper}>
       <h1>TVL Ranking</h1>
-      <Chart/>
+      <Chart />
       <table css={styles.tableContainer}>
         <thead css={styles.tableHeader}>
           <tr css={styles.headerRow}>
