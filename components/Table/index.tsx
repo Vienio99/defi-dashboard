@@ -29,7 +29,7 @@ export interface ProtocolData {
 export const Table: FC = () => {
   const [protocolsData, setProtocolsData] = useState<Array<ProtocolData>>([]);
   const [sortedBy, setSortedBy] = useState<keyof ProtocolData>("currentTvl");
-  const [terraTvls, setTerraTvls] = useState<
+  const [historicalTvls, setHistoricalTvls] = useState<
     Array<{ date: number; totalLiquidityUSD: number }>
   >([]);
   const reverseSortingRef = useRef<boolean>(false);
@@ -54,7 +54,7 @@ export const Table: FC = () => {
   };
 
   useEffect(() => {
-    async function fetchTerraTvls() {
+    async function fetchHistoricalTvls() {
       const url = "https://api.llama.fi/charts/terra";
       const res = await fetch(url);
 
@@ -62,8 +62,7 @@ export const Table: FC = () => {
         throw Error("could not fetch the data");
       }
       const data = await res.json();
-      console.log(data);
-      setTerraTvls(data);
+      setHistoricalTvls(data);
     }
 
     async function fetchProtocolsData() {
@@ -87,15 +86,14 @@ export const Table: FC = () => {
     }
     if (protocolsData.length === 0) {
       fetchProtocolsData();
-      fetchTerraTvls();
+      fetchHistoricalTvls();
     }
-    console.log("rerender");
   }, [protocolsData]);
 
   return (
     <div css={styles.tableWrapper}>
       <h1>TVL Ranking</h1>
-      <Chart />
+      <Chart historicalTvls={historicalTvls} />
       <table css={styles.tableContainer}>
         <thead css={styles.tableHeader}>
           <tr css={styles.headerRow}>

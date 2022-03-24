@@ -1,0 +1,1 @@
+// Converts fetched data to be used in charts

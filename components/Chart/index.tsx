@@ -1,16 +1,55 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import React, { useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { createChart, CrosshairMode, IChartApi } from "lightweight-charts";
 import * as styles from "./styles";
 
-function Chart() {
+interface ChartProps {
+  historicalTvls: Array<{ date: number; totalLiquidityUSD: number }>;
+}
+
+export const Chart: FC<ChartProps> = (props) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chart = useRef<IChartApi | null>(null);
   const resizeObserver = useRef<ResizeObserver | null>(null);
 
+  const [historicalTvls, setHistoricalTvls] = useState<Array<{ time: string; value: number }>>([]);
+
+  // function convertUnixToDate(data) {
+  //   console.log(props.historicalTvls);
+  // }
+  // ASYNC?
+
+
+
   useEffect(() => {
-    if (chart.current === null) {
+
+    function convertHistoricalTvl(data) {
+      const convertedTvls: Array<{ time: string; value: number }> = [];
+      const dtFormat: Intl.DateTimeFormatOptions = {
+        day: "numeric",
+        month: "2-digit",
+        year: "numeric",
+      };
+  
+      for (const record in data) {
+        const date = data[record].date * 1000;
+        const convertedDate = new Date(date);
+
+        const formattedDate = convertedDate.getFullYear() + "-" + (convertedDate.getMonth() + 1) + "-" + convertedDate.getDate();
+        console.log(formattedDate);
+
+  
+        const tvl: number = data[record].totalLiquidityUSD;
+  
+        const convertedTvl = { time: formattedDate, value: tvl };
+        convertedTvls.push(convertedTvl);
+      }
+  
+      setHistoricalTvls(convertedTvls);
+    }
+
+    if (chart.current === null && historicalTvls.length !== 0) {
       // TO-DO: might be an anti-pattern to use that type predicates?
       chart.current = createChart(chartContainerRef.current as HTMLDivElement, {
         width: 700,
@@ -35,8 +74,6 @@ function Chart() {
         },
       });
 
-      console.log(chart.current);
-
       const areaSeries = chart.current.addAreaSeries({
         // topColor: "rgba(38,198,218, 0.56)",
         // bottomColor: "white",
@@ -44,16 +81,15 @@ function Chart() {
         lineWidth: 2,
       });
 
-      areaSeries.setData([
-        { time: "2018-10-19", value: 19103293.0 },
-        { time: "2018-10-22", value: 21737523.0 },
-        { time: "2018-10-23", value: 29328713.0 },
-        { time: "2018-10-24", value: 37435638.0 },
-        { time: "2018-10-25", value: 25269995.0 },
-        { time: "2018-10-26", value: 24973311.0 },
-      ]);
+      areaSeries.setData(historicalTvls);
     }
-  }, []);
+
+    if (historicalTvls.length === 0) {
+      convertHistoricalTvl(props.historicalTvls);
+    }
+
+    console.log(historicalTvls);
+  }, [historicalTvls]);
 
   // Resize chart on container resizes.
   useEffect(() => {
@@ -79,6 +115,6 @@ function Chart() {
       <div ref={chartContainerRef} className="chart-container" />
     </div>
   );
-}
+};
 
 export default Chart;

@@ -9,7 +9,6 @@ export const fetchProtocol = async (protocolName: string) => {
       throw Error("could not fetch the data");
     }
     const data = await res.json();
-    console.log(data);
 
     const tvls = data.chainTvls?.Terra?.tvl;
 
@@ -25,7 +24,6 @@ export const fetchProtocol = async (protocolName: string) => {
       protocolData.tvlHistory = tvls;
       const tvlsLength = tvls.length - 1;
       const currentTVL: number = tvls[tvlsLength].totalLiquidityUSD;
-      console.log(currentTVL);
 
       // Have to check everything because otherwise it returns NaN and it shows up in the table
       if (currentTVL !== undefined) {
