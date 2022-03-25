@@ -22,7 +22,7 @@ interface TableItemProps {
 
 // TO-DO: take into consideration what happens with the page if list passes 100vh
 export const TableItem: FC<TableItemProps> = (props) => {
-  // TO-DO: destructure props maybe?
+
 
   return (
     <>

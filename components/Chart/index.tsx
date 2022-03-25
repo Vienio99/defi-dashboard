@@ -13,17 +13,16 @@ export const Chart: FC<ChartProps> = (props) => {
   const chart = useRef<IChartApi | null>(null);
   const resizeObserver = useRef<ResizeObserver | null>(null);
 
-  const [historicalTvls, setHistoricalTvls] = useState<Array<{ time: string; value: number }>>([]);
+  const [historicalTvls, setHistoricalTvls] = useState<
+    Array<{ time: string; value: number }>
+  >([]);
 
   // function convertUnixToDate(data) {
   //   console.log(props.historicalTvls);
   // }
   // ASYNC?
 
-
-
   useEffect(() => {
-
     function convertHistoricalTvl(data) {
       const convertedTvls: Array<{ time: string; value: number }> = [];
       const dtFormat: Intl.DateTimeFormatOptions = {
@@ -31,21 +30,28 @@ export const Chart: FC<ChartProps> = (props) => {
         month: "2-digit",
         year: "numeric",
       };
-  
-      for (const record in data) {
-        const date = data[record].date * 1000;
-        const convertedDate = new Date(date);
 
-        const formattedDate = convertedDate.getFullYear() + "-" + (convertedDate.getMonth() + 1) + "-" + convertedDate.getDate();
+      for (const record in data) {
+        const unixDate = data[record].date * 1000;
+        const date = new Date(unixDate);
+
+        const dateParts = {
+          date: date.getDate(),
+          month: date.getMonth() + 1,
+          year: date.getFullYear(),
+        };
+
+        // format to 2020-11-2 format
+        const formattedDate =
+          dateParts.year + "-" + dateParts.month + "-" + dateParts.date;
         console.log(formattedDate);
 
-  
         const tvl: number = data[record].totalLiquidityUSD;
-  
+
         const convertedTvl = { time: formattedDate, value: tvl };
         convertedTvls.push(convertedTvl);
       }
-  
+
       setHistoricalTvls(convertedTvls);
     }
 

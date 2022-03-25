@@ -6,7 +6,6 @@ export const navbarContainer = css({
   flexDirection: "column",
   marginTop: "1rem",
   color: "white",
-  padding: "2.8rem",
   gap: "1rem",
 });
 
