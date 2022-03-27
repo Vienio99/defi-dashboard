@@ -4,9 +4,8 @@ import { css } from "@emotion/react";
 export const navbarContainer = css({
   display: "flex",
   flexDirection: "column",
-  marginTop: "1rem",
   color: "white",
-  gap: "1rem",
+  gap: "1.6rem",
 });
 
 export const title = css({
@@ -32,8 +31,7 @@ export const navItem = css({
 
 export const navSwitch = css({
   display: "flex",
-  gap: "0.4rem",
-  margin: "12px 0 12px 0",
+  gap: "1rem",
 });
 
 export const navSwitchBtn = css({

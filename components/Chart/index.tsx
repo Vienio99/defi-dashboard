@@ -54,9 +54,10 @@ export const Chart: FC<ChartProps> = (props) => {
 
       setHistoricalTvls(convertedTvls);
     }
+    
 
     if (chart.current === null && historicalTvls.length !== 0) {
-      // TO-DO: might be an anti-pattern to use that type predicates?
+      // TO-DO: might be an anti-pattern to use that type assertions?
       chart.current = createChart(chartContainerRef.current as HTMLDivElement, {
         width: 700,
         height: 300,

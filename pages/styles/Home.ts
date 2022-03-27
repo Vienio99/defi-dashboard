@@ -18,10 +18,9 @@ export const navbarWrapper = css({
   boxShadow: "rgb(17 19 30) 1px 1px 2px, rgb(53 57 84) -1px -1px 2px",
   height: "100vh",
   width: "18rem",
-  position: "fixed",
-  zIndex: "1",
-  top: "0",
-  left: "0",
+  position: "sticky",
+  top: "0px",
+  zIndex: "1000",
   overflowX: "hidden",
   padding: "2.8rem",
 });

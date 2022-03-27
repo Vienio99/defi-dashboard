@@ -7,6 +7,7 @@ export const tableWrapper = css({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
+  gap: "1.2rem"
 });
 
 export const tableContainer = css({
@@ -16,10 +17,6 @@ export const tableContainer = css({
 
 export const tableHeader = css({
   borderBottom: "1px solid grey",
-});
-
-export const tableRow = css({
-  paddingBottom: "5px",
 });
 
 export const headerRow = css({
