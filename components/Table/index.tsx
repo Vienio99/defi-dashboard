@@ -7,8 +7,9 @@ import { protocols } from "../../constants";
 import sortProtocols from "../../utils/sortProtocols";
 import { fetchProtocol } from "../../utils/fetchProtocol";
 import dynamic from "next/dynamic";
+import formatTvl from "../../utils/formatTvl";
 
-// TO-DO: not sure why it needs to be that way
+// Needs dynamic import because >probably!< ligthweight-charts runs only in browser
 const Chart = dynamic(() => import("../../components/Chart"), {
   ssr: false,
 });
@@ -27,12 +28,14 @@ export interface ProtocolData {
 }
 
 export const Table: FC = () => {
-  const [protocolsData, setProtocolsData] = useState<Array<ProtocolData>>([]);
+  const [allProtocols, setAllProtocols] = useState<Array<ProtocolData>>([]);
   const [sortedBy, setSortedBy] = useState<keyof ProtocolData>("currentTvl");
   const [historicalTvls, setHistoricalTvls] = useState<
     Array<{ date: number; totalLiquidityUSD: number }>
   >([]);
   const reverseSortingRef = useRef<boolean>(false);
+
+  console.log(historicalTvls);
 
   // TO-DO: Maybe extract sorting logic to external hook for Nfts etc that will be implemented in the future?
   const handleSort = (field: keyof ProtocolData) => {
@@ -42,15 +45,15 @@ export const Table: FC = () => {
       reverseSortingRef.current = false;
     }
 
-    // Create new array with [...protocolsData] to make re-render
+    // Create new array with [...protocolsData] to make re-render because otherwise React thinks that it's the same object using reference and doesn't re-render
     const sortedProtocols = sortProtocols(
-      [...protocolsData],
+      [...allProtocols],
       field,
       reverseSortingRef.current
     );
 
     setSortedBy(field);
-    setProtocolsData(sortedProtocols);
+    setAllProtocols(sortedProtocols);
   };
 
   useEffect(() => {
@@ -65,7 +68,7 @@ export const Table: FC = () => {
       setHistoricalTvls(data);
     }
 
-    async function fetchProtocolsData() {
+    async function fetchAllProtocols() {
       await Promise.all(
         protocols.map((protocol) => fetchProtocol(protocol.name))
       ).then((protocols) => {
@@ -80,47 +83,112 @@ export const Table: FC = () => {
           false
         );
 
-        setProtocolsData(sortedProtocols);
-        console.log(sortedProtocols);
+        setAllProtocols(sortedProtocols);
       });
     }
-    if (protocolsData.length === 0) {
-      fetchProtocolsData();
+    if (allProtocols.length === 0) {
+      fetchAllProtocols();
       fetchHistoricalTvls();
     }
-  }, [protocolsData]);
+  }, [allProtocols]);
 
   return (
     <div css={styles.tableWrapper}>
       <h1>TVL Ranking</h1>
-      <Chart historicalTvls={historicalTvls} />
-      <table css={styles.tableContainer}>
-        <thead css={styles.tableHeader}>
-          <tr css={styles.headerRow}>
-            <th>Name</th>
-            <th onClick={() => handleSort("currentTvl")}>TVL</th>
-            {/* TO-DO: make filtering for category */}
-            <th>Category</th>
-            <th onClick={() => handleSort("oneDayChange")}>1d change</th>
-            <th onClick={() => handleSort("oneWeekChange")}>7d change</th>
-            <th onClick={() => handleSort("oneMonthChange")}>1m change</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* TO-DO: make it render every protocol >>before<< displaying because now it's a bit clunky */}
-          {protocolsData.map((protocol, index) => {
-            if (protocol !== undefined) {
-              return (
-                <TableItem
-                  key={protocol.id}
-                  protocolData={protocol}
-                  index={index + 1}
-                />
-              );
-            }
-          })}
-        </tbody>
-      </table>
+      {/* TO-DO: put styles into the file */}
+      <div css={{ width: "100%", display: "grid", gap: "1.6rem" }}>
+        <div css={styles.infoContainer}>
+          {/* Three container on the left to the chart */}
+          <div
+            css={{
+              display: "grid",
+              gridAutoRows: "auto",
+              width: "100%",
+              gap: "1rem",
+            }}
+          >
+            <div
+              css={{
+                border: "1px solid grey",
+                borderRadius: "8px",
+                fontWeight: "bold",
+                padding: "18px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.6rem",
+              }}
+            >
+              <div>Total Value Locked (USD)</div>
+              <div css={{ fontSize: "30px" }}>
+                {historicalTvls && (
+                  <>
+                    $
+                    {formatTvl(
+                      historicalTvls[historicalTvls.length - 1]
+                        ?.totalLiquidityUSD
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+            <div
+              css={{
+                border: "1px solid grey",
+                borderRadius: "8px",
+                fontWeight: "bold",
+                padding: "18px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.6rem",
+              }}
+            >
+              <div>Change (24h)</div>
+            </div>
+            <div
+              css={{
+                border: "1px solid grey",
+                borderRadius: "8px",
+                fontWeight: "bold",
+                padding: "18px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.6rem",
+              }}
+            >
+              Anchor Dominance
+            </div>
+          </div>
+          <Chart historicalTvls={historicalTvls} />
+        </div>
+
+        <table css={styles.tableContainer}>
+          <thead css={styles.tableHeader}>
+            <tr css={styles.headerRow}>
+              <th>Name</th>
+              <th onClick={() => handleSort("currentTvl")}>TVL</th>
+              {/* TO-DO: make filtering for category */}
+              <th>Category</th>
+              <th onClick={() => handleSort("oneDayChange")}>1d change</th>
+              <th onClick={() => handleSort("oneWeekChange")}>7d change</th>
+              <th onClick={() => handleSort("oneMonthChange")}>1m change</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* TO-DO: make it render every protocol >>before<< displaying because now it's a bit clunky */}
+            {allProtocols.map((protocol, index) => {
+              if (protocol !== undefined) {
+                return (
+                  <TableItem
+                    key={protocol.id}
+                    protocol={protocol}
+                    index={index + 1}
+                  />
+                );
+              }
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

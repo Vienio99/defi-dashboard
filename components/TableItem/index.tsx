@@ -8,7 +8,7 @@ import * as styles from "./styles";
 
 interface TableItemProps {
   index: number;
-  protocolData: {
+  protocol: {
     name: string;
     symbol: string;
     category: string;
@@ -20,55 +20,53 @@ interface TableItemProps {
   };
 }
 
-// TO-DO: take into consideration what happens with the page if list passes 100vh
 export const TableItem: FC<TableItemProps> = (props) => {
-
-
+  const { protocol } = props;
   return (
     <>
-      {props.protocolData && (
+      {protocol && (
         <tr>
           <td css={styles.nameCell}>
             <FavoritesIcon />
             <span>{props.index}</span>
-            {props.protocolData.logo && (
+            {protocol.logo && (
               <img
-                src={props.protocolData.logo}
+                src={protocol.logo}
                 css={css({ borderRadius: "50%" })}
                 height="30px"
               />
             )}
-            {props.protocolData.name}
-            {props.protocolData.symbol != "-" && ` (${props.protocolData.symbol})`}
+            {protocol.name}
+            {protocol.symbol != "-" && ` (${protocol.symbol})`}
           </td>
           <td>
-            {props.protocolData.currentTvl && formatTvl(props.protocolData.currentTvl)}
+            {protocol.currentTvl && formatTvl(protocol.currentTvl)}
           </td>
-          <td>{props.protocolData.category}</td>
+          <td>{protocol.category}</td>
 
-          {props.protocolData.oneDayChange && (
+          {protocol.oneDayChange && (
             <td
-              css={{ color: props.protocolData.oneDayChange >= 0 ? "green" : "red" }}
+              css={{ color: protocol.oneDayChange >= 0 ? "green" : "red" }}
             >
-              {roundTvlChangePercentage(props.protocolData.oneDayChange, 3)}%
+              {roundTvlChangePercentage(protocol.oneDayChange, 3)}%
             </td>
           )}
 
-          {props.protocolData.oneWeekChange && (
+          {protocol.oneWeekChange && (
             <td
-              css={{ color: props.protocolData.oneWeekChange >= 0 ? "green" : "red" }}
+              css={{ color: protocol.oneWeekChange >= 0 ? "green" : "red" }}
             >
-              {roundTvlChangePercentage(props.protocolData.oneWeekChange, 3)}%
+              {roundTvlChangePercentage(protocol.oneWeekChange, 3)}%
             </td>
           )}
 
-          {props.protocolData.oneMonthChange && (
+          {protocol.oneMonthChange && (
             <td
               css={{
-                color: props.protocolData.oneMonthChange >= 0 ? "green" : "red",
+                color: protocol.oneMonthChange >= 0 ? "green" : "red",
               }}
             >
-              {roundTvlChangePercentage(props.protocolData.oneMonthChange, 3)}%
+              {roundTvlChangePercentage(protocol.oneMonthChange, 3)}%
             </td>
           )}
         </tr>

@@ -17,11 +17,6 @@ export const Chart: FC<ChartProps> = (props) => {
     Array<{ time: string; value: number }>
   >([]);
 
-  // function convertUnixToDate(data) {
-  //   console.log(props.historicalTvls);
-  // }
-  // ASYNC?
-
   useEffect(() => {
     function convertHistoricalTvl(data) {
       const convertedTvls: Array<{ time: string; value: number }> = [];
@@ -44,7 +39,6 @@ export const Chart: FC<ChartProps> = (props) => {
         // format to 2020-11-2 format
         const formattedDate =
           dateParts.year + "-" + dateParts.month + "-" + dateParts.date;
-        console.log(formattedDate);
 
         const tvl: number = data[record].totalLiquidityUSD;
 
@@ -95,7 +89,6 @@ export const Chart: FC<ChartProps> = (props) => {
       convertHistoricalTvl(props.historicalTvls);
     }
 
-    console.log(historicalTvls);
   }, [historicalTvls]);
 
   // Resize chart on container resizes.
