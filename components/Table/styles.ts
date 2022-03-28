@@ -25,5 +25,28 @@ export const headerRow = css({
 
 export const infoContainer = css({
   display: "flex",
-  gap: "0.8rem"
-})
+  gap: "0.8rem",
+});
+
+export const mainContainer = css({
+  width: "100%",
+  display: "grid",
+  gap: "1.6rem",
+});
+
+export const infoBoxesContainer = css({
+  display: "grid",
+  gridAutoRows: "auto",
+  width: "100%",
+  gap: "1rem",
+});
+
+export const infoBox = css({
+  border: "1px solid grey",
+  borderRadius: "8px",
+  fontWeight: "bold",
+  padding: "18px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.6rem",
+});

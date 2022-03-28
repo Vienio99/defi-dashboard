@@ -4,20 +4,12 @@ import { FC } from "react";
 import formatTvl from "../../utils/formatTvl";
 import roundTvlChangePercentage from "../../utils/roundTvlChangePercentage";
 import { FavoritesIcon } from "../Icons/FavoritesIcon";
+import { ProtocolData } from "../Table";
 import * as styles from "./styles";
 
 interface TableItemProps {
   index: number;
-  protocol: {
-    name: string;
-    symbol: string;
-    category: string;
-    logo: string;
-    currentTvl?: number;
-    oneDayChange?: number;
-    oneWeekChange?: number;
-    oneMonthChange?: number;
-  };
+  protocol: ProtocolData
 }
 
 export const TableItem: FC<TableItemProps> = (props) => {

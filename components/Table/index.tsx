@@ -8,6 +8,7 @@ import sortProtocols from "../../utils/sortProtocols";
 import { fetchProtocol } from "../../utils/fetchProtocol";
 import dynamic from "next/dynamic";
 import formatTvl from "../../utils/formatTvl";
+import roundTvlChangePercentage from "../../utils/roundTvlChangePercentage";
 
 // Needs dynamic import because >probably!< ligthweight-charts runs only in browser
 const Chart = dynamic(() => import("../../components/Chart"), {
@@ -96,28 +97,11 @@ export const Table: FC = () => {
     <div css={styles.tableWrapper}>
       <h1>TVL Ranking</h1>
       {/* TO-DO: put styles into the file */}
-      <div css={{ width: "100%", display: "grid", gap: "1.6rem" }}>
+      <div css={styles.mainContainer}>
         <div css={styles.infoContainer}>
           {/* Three container on the left to the chart */}
-          <div
-            css={{
-              display: "grid",
-              gridAutoRows: "auto",
-              width: "100%",
-              gap: "1rem",
-            }}
-          >
-            <div
-              css={{
-                border: "1px solid grey",
-                borderRadius: "8px",
-                fontWeight: "bold",
-                padding: "18px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.6rem",
-              }}
-            >
+          <div css={styles.infoBoxesContainer}>
+            <div css={styles.infoBox}>
               <div>Total Value Locked (USD)</div>
               <div css={{ fontSize: "30px" }}>
                 {historicalTvls && (
@@ -131,32 +115,26 @@ export const Table: FC = () => {
                 )}
               </div>
             </div>
-            <div
-              css={{
-                border: "1px solid grey",
-                borderRadius: "8px",
-                fontWeight: "bold",
-                padding: "18px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.6rem",
-              }}
-            >
+            <div css={styles.infoBox}>
               <div>Change (24h)</div>
+              <div css={{ fontSize: "30px" }}>
+                {historicalTvls && (
+                  <>
+                    {roundTvlChangePercentage(
+                      (historicalTvls[historicalTvls.length - 1]
+                        ?.totalLiquidityUSD /
+                        historicalTvls[historicalTvls.length - 2]
+                          ?.totalLiquidityUSD -
+                        1) *
+                        100,
+                      3
+                    )}
+                    %
+                  </>
+                )}
+              </div>
             </div>
-            <div
-              css={{
-                border: "1px solid grey",
-                borderRadius: "8px",
-                fontWeight: "bold",
-                padding: "18px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.6rem",
-              }}
-            >
-              Anchor Dominance
-            </div>
+            <div css={styles.infoBox}>Anchor Dominance</div>
           </div>
           <Chart historicalTvls={historicalTvls} />
         </div>
