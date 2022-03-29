@@ -31,12 +31,14 @@ export interface ProtocolData {
 export const Table: FC = () => {
   const [allProtocols, setAllProtocols] = useState<Array<ProtocolData>>([]);
   const [sortedBy, setSortedBy] = useState<keyof ProtocolData>("currentTvl");
-  const [historicalTvls, setHistoricalTvls] = useState<
+  const [historicalTerraTvls, setHistoricalTerraTvls] = useState<
     Array<{ date: number; totalLiquidityUSD: number }>
   >([]);
   const reverseSortingRef = useRef<boolean>(false);
+  const [currentTerraTvl, setCurrentTerraTvl] = useState("");
+  const [oneDayTerraTvlChange, setOneDayTerraTvlChange] = useState("");
 
-  console.log(historicalTvls);
+  console.log(historicalTerraTvls);
 
   // TO-DO: Maybe extract sorting logic to external hook for Nfts etc that will be implemented in the future?
   const handleSort = (field: keyof ProtocolData) => {
@@ -58,7 +60,7 @@ export const Table: FC = () => {
   };
 
   useEffect(() => {
-    async function fetchHistoricalTvls() {
+    async function fetchTerraTvls() {
       const url = "https://api.llama.fi/charts/terra";
       const res = await fetch(url);
 
@@ -66,7 +68,19 @@ export const Table: FC = () => {
         throw Error("could not fetch the data");
       }
       const data = await res.json();
-      setHistoricalTvls(data);
+
+      const latestTvl = formatTvl(data[data.length - 1]?.totalLiquidityUSD);
+
+      const oneDayChange = roundTvlChangePercentage(
+        (data[data.length - 1]?.totalLiquidityUSD /
+          data[data.length - 2]?.totalLiquidityUSD -
+          1) *
+          100,
+        3
+      );
+      setHistoricalTerraTvls(data);
+      setCurrentTerraTvl(latestTvl);
+      setOneDayTerraTvlChange(oneDayChange);
     }
 
     async function fetchAllProtocols() {
@@ -89,56 +103,34 @@ export const Table: FC = () => {
     }
     if (allProtocols.length === 0) {
       fetchAllProtocols();
-      fetchHistoricalTvls();
+      fetchTerraTvls();
     }
   }, [allProtocols]);
 
   return (
     <div css={styles.tableWrapper}>
       <h1>TVL Ranking</h1>
-      {/* TO-DO: put styles into the file */}
       <div css={styles.mainContainer}>
         <div css={styles.infoContainer}>
-          {/* Three container on the left to the chart */}
+          {/* Three containers on the left to the chart */}
           <div css={styles.infoBoxesContainer}>
             <div css={styles.infoBox}>
               <div>Total Value Locked (USD)</div>
               <div css={{ fontSize: "30px" }}>
-                {historicalTvls && (
-                  <>
-                    $
-                    {formatTvl(
-                      historicalTvls[historicalTvls.length - 1]
-                        ?.totalLiquidityUSD
-                    )}
-                  </>
-                )}
+                {currentTerraTvl && <>${currentTerraTvl}</>}
               </div>
             </div>
             <div css={styles.infoBox}>
               <div>Change (24h)</div>
               <div css={{ fontSize: "30px" }}>
-                {historicalTvls && (
-                  <>
-                    {roundTvlChangePercentage(
-                      (historicalTvls[historicalTvls.length - 1]
-                        ?.totalLiquidityUSD /
-                        historicalTvls[historicalTvls.length - 2]
-                          ?.totalLiquidityUSD -
-                        1) *
-                        100,
-                      3
-                    )}
-                    %
-                  </>
-                )}
+                {oneDayTerraTvlChange && <>{oneDayTerraTvlChange}%</>}
               </div>
             </div>
             <div css={styles.infoBox}>Anchor Dominance</div>
           </div>
-          <Chart historicalTvls={historicalTvls} />
+          <Chart historicalTvls={historicalTerraTvls} />
         </div>
-
+        {/* Table */}
         <table css={styles.tableContainer}>
           <thead css={styles.tableHeader}>
             <tr css={styles.headerRow}>
