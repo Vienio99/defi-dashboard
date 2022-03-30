@@ -21,6 +21,7 @@ export interface ProtocolData {
   symbol: string;
   category: string;
   logo: string;
+  slug: string;
   currentTvl?: number;
   oneDayChange?: number;
   oneWeekChange?: number;

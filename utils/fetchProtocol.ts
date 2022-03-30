@@ -18,6 +18,7 @@ export const fetchProtocol = async (protocolName: string) => {
       symbol: data.symbol,
       category: data.category,
       logo: data.logo,
+      slug: protocolName,
     };
 
     if (tvls !== undefined) {
